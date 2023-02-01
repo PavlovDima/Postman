@@ -1,0 +1,588 @@
+{
+	"info": {
+		"_postman_id": "2b2c1694-e2e4-44c1-aa18-0aec0e0cf375",
+		"name": "10-22_Automation-CA-Marketing with Evironments QA_HW_11",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24859873"
+	},
+	"item": [
+		{
+			"name": "Create new postal address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 1000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body has 'id'\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"ID\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"ID\");\r",
+							"pm.environment.unset(\"company\");\r",
+							"pm.environment.set(\"company\", \"Google-\" + new Date().getTime())\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": {\r\n        \"fullName\": {\r\n            \"firstName\": \"Sazan\",\r\n            \"lastName\": \"Carpov\"\r\n        },\r\n        \"company\": \"{{company}}\",\r\n        \"taxInfo\": {\r\n            \"id\": null,\r\n            \"type\": null\r\n        },\r\n        \"addressLine1\": \"111 Carp Drive\",\r\n        \"addressLine2\": null,\r\n        \"street\": {\r\n            \"name\": null,\r\n            \"number\": null\r\n        },\r\n        \"city\": \"Lexington\",\r\n        \"country\": \"USA\",\r\n        \"subdivision\": \"KY\",\r\n        \"zipCode\": \"40503\",\r\n        \"phoneNumber\": \"123-456-7890\",\r\n        \"location\": {\r\n            \"latitude\": 38.0305996,\r\n            \"longitude\": -84.5238368\r\n        }\r\n    },\r\n    \"setAsDefault\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Make postal address by default",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 1000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{ID}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/default",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show all postal addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}",
+					"host": [
+						"{{URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Specific postal addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"// Test with enviriment\r",
+							"pm.test(\"Entire response is correct\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.address.id).to.eql(pm.environment.get(\"ID\"));\r",
+							"    pm.expect(jsonData.address.fullName.firstName).to.eql(\"Sazan\");\r",
+							"    pm.expect(jsonData.address.fullName.lastName).to.eql(\"Carpov\");\r",
+							"    pm.expect(jsonData.address.country).to.eql(\"USA\");\r",
+							"    pm.expect(jsonData.address.subdivision).to.eql(\"KY\");\r",
+							"    pm.expect(jsonData.address.city).to.eql(\"Lexington\");\r",
+							"    pm.expect(jsonData.address.zipCode).to.eql(\"40503\");\r",
+							"    pm.expect(jsonData.address.phoneNumber).to.eql(\"123-456-7890\");\r",
+							"    pm.expect(jsonData.address.company).to.eql(pm.environment.get(\"company\"));\r",
+							"    pm.expect(jsonData.address.addressLine1).to.eql(\"111 Carp Drive\");\r",
+							"    pm.expect(jsonData.isDefaultAddress).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body should be in the correct format\", function() {\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.address).to.be.a('object');\r",
+							"    pm.expect(jsonData.address.id).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.fullName).to.be.a('object');\r",
+							"    pm.expect(jsonData.address.fullName.firstName).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.fullName.lastName).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.country).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.subdivision).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.city).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.zipCode).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.phoneNumber).to.be.a('string');\r",
+							"    pm.expect(jsonData.address.addressLine1).to.be.a('string');\r",
+							"    pm.expect(jsonData.isDefaultAddress).to.be.a('boolean');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://addresses.wixapps.net/_api/addresses-web/v1/addresses/{{ID}}",
+					"protocol": "https",
+					"host": [
+						"addresses",
+						"wixapps",
+						"net"
+					],
+					"path": [
+						"_api",
+						"addresses-web",
+						"v1",
+						"addresses",
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update existing postal address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": {\r\n        \"id\": \"{{ID}}\",\r\n        \"fullName\": {\r\n            \"firstName\": \"Omul\",\r\n            \"lastName\": \"Peskarev\"\r\n        },\r\n        \"company\": \"Fishing Store Inc\",\r\n        \"taxInfo\": {\r\n            \"id\": null,\r\n            \"type\": null\r\n        },\r\n        \"addressLine1\": \"751 Omul St\",\r\n        \"addressLine2\": null,\r\n        \"street\": {\r\n            \"name\": null,\r\n            \"number\": null\r\n        },\r\n        \"city\": \"Lexington\",\r\n        \"country\": \"USA\",\r\n        \"subdivision\": \"AL\",\r\n        \"zipCode\": \"40503\",\r\n        \"phoneNumber\": \"123-456-7890\",\r\n        \"location\": {\r\n            \"latitude\": 38.0305996,\r\n            \"longitude\": -84.5238368\r\n        }\r\n    },\r\n    \"setAsDefault\": true,\r\n    \"fieldMask\": {\r\n        \"paths\": [\r\n            \"fullName.firstName\",\r\n            \"fullName.lastName\",\r\n            \"company\",\r\n            \"addressLine1\",\r\n            \"city\",\r\n            \"country\",\r\n            \"subdivision\",\r\n            \"zipCode\",\r\n            \"phoneNumber\",\r\n            \"location.latitude\",\r\n            \"location.longitude\",\r\n            \"setAsDefault\"\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/{{ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Updated postal addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"YAY!!! I gog it, response code is 200\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/{{ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete existing postal address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 200) {\r",
+							"    tests[\"There is no more that!\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/{{ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check deleted postal addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if(responseCode.code === 400) {\r",
+							"    tests[\"All right!\"] = true;\r",
+							"} else if (responseCode.code === 401) {\r",
+							"    tests[\"Not authorised\"] = false;\r",
+							"} else if (responseCode.code === 403) {\r",
+							"    tests[\"Forbiden\"] = false;\r",
+							"} else if (responseCode.code === 404) {\r",
+							"    tests[\"Not Found\"] = false;\r",
+							"} else if (responseCode.code === 408) {\r",
+							"    tests[\"Request Timeout\"] = false;\r",
+							"} else if (responseCode.code === 500) {\r",
+							"    tests[\"Internal Server Error\"] = false;\r",
+							"} else {\r",
+							"    tests[\"There is no \" + responseCode.code] = false;\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Size  is less than 2000 B\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Header is correct\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\", \"application/json;charset=utf-8\");\r",
+							"    pm.response.to.have.header(\"Connection\", \"keep-alive\");\r",
+							"    pm.response.to.have.header(\"Server\", \"Pepyaka/1.19.10\");\r",
+							"    pm.response.to.have.header(\"X-Content-Type-Options\", \"nosniff\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/{{ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"{{ID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "r63Xxp4J9leOQG0OYpfZTRTxKlwKpjor_K_Emyll1Vg.eyJpbnN0YW5jZUlkIjoiZjQ2Y2Q1MDItZjcyZi00NGY3LTk2MzgtNWRhMWRlYjBiNGU3IiwiYXBwRGVmSWQiOiIxNTA1Yjc3NS1lODg1LWViMWItYjY2NS0xZTQ4NWQ5YmY5MGUiLCJtZXRhU2l0ZUlkIjoiMjhiNzkzZDYtNTQyNC00MDU4LTgwNDktMDI2YTRkYjAyODJmIiwic2lnbkRhdGUiOiIyMDIzLTAxLTI5VDA0OjEzOjE1LjU1NFoiLCJ1aWQiOiI1NjczMzMwNC02MTZkLTRjYzUtYjEwNy03ZWM3YjdhZGI3NTciLCJkZW1vTW9kZSI6ZmFsc2UsImFpZCI6IjRjNjhiYmIxLTZiYzMtNDMxOC04ODU2LTUzOGFiM2E5NzJlZCIsImJpVG9rZW4iOiJkY2RiNDZkNC1hMzBiLTA0YWYtMTY3MS01ZmNiOTMwMDljYzgiLCJzaXRlT3duZXJJZCI6ImY5MTRmMTFjLWFhYjMtNDUyNy04ZDRlLWJhYjc2MjE0M2E2MCIsImV4cGlyYXRpb25EYXRlIjoiMjAyMy0wMS0yOVQwODoxMzoxNS41NTRaIiwiaGFzVXNlclJvbGUiOmZhbHNlfQ",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
